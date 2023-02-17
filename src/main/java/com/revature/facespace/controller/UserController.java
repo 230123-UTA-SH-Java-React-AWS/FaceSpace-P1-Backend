@@ -10,7 +10,7 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("/api/users")
+    @GetMapping("/api/users/{id}")
     public User getUserById(@PathVariable Integer id) {
         return userRepository.getById(id);
     }
