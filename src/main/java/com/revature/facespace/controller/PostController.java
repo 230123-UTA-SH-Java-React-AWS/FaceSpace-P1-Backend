@@ -27,6 +27,11 @@ public class PostController {
         return postRepository.findAllPostsByProfileId(userId);
     }
 
+    @GetMapping("api/posts")
+    public List<Post> getAllPosts() {
+        return postRepository.findAll();
+    }
+
     @PostMapping("/api/posts")
     public Post addPost(@RequestBody Post post) {
         postRepository.save(post);
