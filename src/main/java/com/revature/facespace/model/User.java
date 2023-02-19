@@ -2,10 +2,13 @@ package com.revature.facespace.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+
 @Entity
 @Table(name = "user_profile")
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -17,10 +20,19 @@ public class User {
     @Transient
     boolean loggedIn;
 
-//    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    private List<Post> posts;
-//    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Comment> comments;
+    @OneToMany(/*mappedBy = "profileId",*/ cascade = CascadeType.ALL, fetch =
+            FetchType.EAGER)
+    @JoinColumn(name = "profileId", referencedColumnName = "id")
+    private List<Post> posts;
+    @OneToMany(/*mappedBy = "profileId",*/ cascade = CascadeType.ALL, fetch =
+            FetchType.LAZY)
+    @JoinColumn(name = "profileId", referencedColumnName = "id")
+    private List<Comment> comments;
+
+    @OneToMany(/*mappedBy = "profileId",*/ cascade = CascadeType.ALL, fetch =
+            FetchType.LAZY)
+    @JoinColumn(name = "profileId", referencedColumnName = "id")
+    private List<Likes> likes;
 
     public User() {
 
@@ -83,4 +95,35 @@ public class User {
     public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
     }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return loggedIn == user.loggedIn && Objects.equals(id, user.id) && Objects.equals(emailAddress, user.emailAddress) && Objects.equals(password, user.password) && Objects.equals(givenName, user.givenName) && Objects.equals(surname, user.surname) && Objects.equals(posts, user.posts) && Objects.equals(comments, user.comments);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, emailAddress, password, givenName, surname, loggedIn, posts, comments);
+    }
+
+
 }
