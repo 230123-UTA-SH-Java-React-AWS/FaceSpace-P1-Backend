@@ -2,7 +2,6 @@ package com.revature.facespace.controller;
 
 import com.revature.facespace.model.Post;
 import com.revature.facespace.repository.PostRepository;
-import com.revature.facespace.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,9 +12,6 @@ import java.util.Optional;
 public class PostController {
     @Autowired
     PostRepository postRepository;
-
-    @Autowired
-    UserRepository userRepository;
 
     @GetMapping("/api/posts/{postId}")
     public Post getPostById(@PathVariable Integer postId) {
