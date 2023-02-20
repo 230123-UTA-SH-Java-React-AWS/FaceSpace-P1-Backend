@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-//@CrossOrigin("") -- this is what allows front end to use same port to get
-// data. Will use later
+@CrossOrigin("http://localhost:3000")
 public class UserController {
     @Autowired
     UserRepository userRepository;
