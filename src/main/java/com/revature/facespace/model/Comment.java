@@ -1,12 +1,13 @@
 package com.revature.facespace.model;
 
 import jakarta.persistence.*;
-
+import java.io.Serializable;
+import java.util.Objects;
 
 
 @Entity
 @Table(name = "post_comment")
-public class Comment {
+public class Comment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -54,5 +55,30 @@ public class Comment {
 
     public void setPostId(Integer postId) {
         this.postId = postId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comment comment = (Comment) o;
+        return Objects.equals(id, comment.id) && Objects.equals(writtenText,
+                comment.writtenText) && Objects.equals(profileId,
+                comment.profileId) && Objects.equals(postId, comment.postId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, writtenText, profileId, postId);
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", writtenText='" + writtenText + '\'' +
+                ", profileId=" + profileId +
+                ", postId=" + postId +
+                '}';
     }
 }

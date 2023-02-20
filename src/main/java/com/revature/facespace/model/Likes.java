@@ -6,9 +6,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 @Entity
 @Table(name = "post_like")
-public class Likes {
+public class Likes implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -50,5 +53,28 @@ public class Likes {
 
     public void setPostId(Integer postId) {
         this.postId = postId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Likes likes = (Likes) o;
+        return Objects.equals(id, likes.id) && Objects.equals(profileId,
+                likes.profileId) && Objects.equals(postId, likes.postId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, profileId, postId);
+    }
+
+    @Override
+    public String toString() {
+        return "Likes{" +
+                "id=" + id +
+                ", profileId=" + profileId +
+                ", postId=" + postId +
+                '}';
     }
 }

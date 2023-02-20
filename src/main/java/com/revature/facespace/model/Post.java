@@ -4,10 +4,11 @@ import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.io.Serializable;
 
 @Entity
 @Table (name = "user_post")
-public class Post {
+public class Post implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -67,5 +68,16 @@ public class Post {
     @Override
     public int hashCode() {
         return Objects.hash(id, writtenText, profileId, comments, likes);
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", writtenText='" + writtenText + '\'' +
+                ", profileId=" + profileId +
+                ", comments=" + comments +
+                ", likes=" + likes +
+                '}';
     }
 }
