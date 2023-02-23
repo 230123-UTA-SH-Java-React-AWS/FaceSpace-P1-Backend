@@ -3,6 +3,7 @@ import com.revature.facespace.model.User;
 import com.revature.facespace.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -42,41 +43,33 @@ public class UserController {
      * Use postman to test and send in the body. To send over data to the server,
      * format of body to make it like this:
      * 
-     * <email>
-     * <password>
+     *  {
+     *      "id": 0,
+     *      "emailAddress": "sean@gfake.com",
+     *      "password": "password123",
+     *      "given_name": "",
+     *      "surname": "" 
+     *  }
      * 
-     * Ideally I (Andrew) will need to change that String datatype to a JSON datatype since
-     * the server expects that. I'll try to see if I can improve on this. 
+     * The only information we need is the "emailAddress" and "password" fields. The
+     * rest of the fields could be whatever. Will return a user and populate those fields
+     * from the database
      * 
     */
     @GetMapping("/api/login")
-    public String login(@RequestBody String body) {
-    
-        // Login message if the user has just visited the page with no info sent to the server 
-        if (body.isBlank()) {
-            return "Welcome to the login page :3";
-        }
-
-        // Does the validation for the login credentials
+    public ResponseEntity<User> login(@RequestBody User body) {
+        System.out.println(body.getEmailAddress());
+        System.out.println(body.getPassword());
         try {
-            String[] a = body.split("\n");
-            User u = userRepository.findByEmailAddressAndPassword(a[0].strip(), a[1].strip());
-            
-            // Need this check here to see if the server sent us a null value
+            User u = userRepository.findByEmailAddressAndPassword(body.getEmailAddress(), body.getPassword());
             if (!u.equals(null)) {
-                return "Welcome " + u.getGivenName() + " "  + u.getSurname();
+                return ResponseEntity.status(200).body(u);
             }
-        }
-
-        // For the String[]
-        catch (ArrayIndexOutOfBoundsException e) {
+        } 
+        catch (NullPointerException e) { //Only executes here if the user doesn't exist in the database
             e.printStackTrace();
         }
-
-        // See if the server sent us a null value back
-        catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-        return "Login Failed";
+        return ResponseEntity.status(400).body(null);
+        
     }
 }
