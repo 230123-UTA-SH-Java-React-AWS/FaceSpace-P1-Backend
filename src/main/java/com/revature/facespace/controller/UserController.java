@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -47,7 +48,7 @@ public class UserController {
      *      "id": 0,
      *      "emailAddress": "sean@gfake.com",
      *      "password": "password123",
-     *      "given_name": "",
+     *      "givenName": "",
      *      "surname": "" 
      *  }
      * 
@@ -61,6 +62,7 @@ public class UserController {
         try {
             User u = userRepository.findByEmailAddressAndPassword(body.getEmailAddress(), body.getPassword());
             if (!u.equals(null)) {
+                u.setLoggedIn(true);
                 return ResponseEntity.status(200).body(u);
             }
         } 
@@ -69,5 +71,26 @@ public class UserController {
         }
         return ResponseEntity.status(400).body(null);
         
+    }
+
+    /*
+     * Format for the JSON should be as similar to the login method
+     *  {
+     *      "id": 0,
+     *      "emailAddress": "",
+     *      "password": "",
+     *      "givenName": "Sean",
+     *      "surname": "Sean" 
+     *  }
+     * 
+     *  Note that the "givenName" and "surname" fields should be identical 
+     *  so the code can search up both of those columns in the database. 
+     *  The "id", "emailAddress", and "password" fields do not matter
+     */
+    @PostMapping("/api/search_friends")
+    public ResponseEntity<List<User>> searchUsers(@RequestBody User body) {
+        List<User> users = userRepository.findByGivenName(body.getGivenName());
+        users.addAll(userRepository.findBySurname(body.getSurname()));
+        return ResponseEntity.status(200).body(users);
     }
 }
