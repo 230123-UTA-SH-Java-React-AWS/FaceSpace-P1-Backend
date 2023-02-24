@@ -16,8 +16,8 @@ public class UserController {
 
     //Retrieving a specific user
     @GetMapping("/api/users/{id}")
-    public User getUserById(@PathVariable Integer id) {
-        return userRepository.getById(id);
+    public Optional<User> getUserById(@PathVariable Integer id) {
+        return userRepository.findById(id);
     }
 
     //Registration/creating a new user
@@ -56,7 +56,7 @@ public class UserController {
      * from the database
      * 
     */
-    @GetMapping("/api/login")
+    @PostMapping("/api/login")
     public ResponseEntity<User> login(@RequestBody User body) {
         try {
             User u = userRepository.findByEmailAddressAndPassword(body.getEmailAddress(), body.getPassword());
