@@ -52,8 +52,8 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        User user = userExist.get(); // If user exists,
-        login(user); // then they're obviously logged in at this point
+        User user = userExist.get();
+        login(user); // User is obviously logged in at this point
 
         String newPassword = enteredPassword.getPassword(); // Storing the newly entered password from Postman
 
