@@ -3,6 +3,7 @@ import com.revature.facespace.model.User;
 import com.revature.facespace.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,17 +28,39 @@ public class UserController {
        return userRepository.save(user);
     }
 
-    //TODO: Password reset/change. PATCH request may also work here
+    /*
+     *
+     * Changing password feature is completed based on users id (on the endpoint)
+     * 
+     * Proper format:
+     * "password": "somePassword1234"
+     * 
+     * 
+     * This format will return a "400 Bad Request" because user shouldn't be able to have an empty password
+     * "password": ""
+     * 
+     */
     @PutMapping("/api/users/{id}")
-    public String changePassword(@PathVariable Integer id,
-                                 @RequestBody User user) {
-        Optional<User> tempUser = userRepository.findById(id);
+    public ResponseEntity<User> changeUserPassword(@PathVariable int id, @RequestBody User enteredPassword) {
+        Optional<User> userExist = userRepository.findById(id);
 
-        if (tempUser.isPresent()) {
-            userRepository.save(user);
-            return "Password successfully changed!";
+        if (userExist.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return "An error occurred.";
+
+        User user = userExist.get();
+        login(user);
+        
+        String newPassword = enteredPassword.getPassword();
+
+        if (newPassword == null || newPassword.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        
+        user.setPassword(newPassword);
+        userRepository.save(user);
+
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
     /* 
