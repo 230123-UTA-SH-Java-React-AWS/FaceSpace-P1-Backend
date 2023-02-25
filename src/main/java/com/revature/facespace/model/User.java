@@ -34,6 +34,11 @@ public class User implements Serializable {
     @JoinColumn(name = "profileId", referencedColumnName = "id")
     private List<Likes> likes;
 
+    @OneToMany(/*mappedBy = "profileId",*/ cascade = CascadeType.ALL, fetch =
+            FetchType.LAZY)
+    @JoinColumn(name = "followerId", referencedColumnName = "id")
+    private List<Following> following;
+
     public User() {
 
     }
