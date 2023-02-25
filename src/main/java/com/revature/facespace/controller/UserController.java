@@ -44,15 +44,23 @@ public class UserController {
     public ResponseEntity<User> changeUserPassword(@PathVariable int id, @RequestBody User enteredPassword) {
         Optional<User> userExist = userRepository.findById(id);
 
+        /*
+         * If a user doesn't exist based on their id,
+         * then it will result in a 404 Not Found
+         */
         if (userExist.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        User user = userExist.get();
-        login(user);
-        
-        String newPassword = enteredPassword.getPassword();
+        User user = userExist.get(); // If user exists,
+        login(user); // then they're obviously logged in at this point
 
+        String newPassword = enteredPassword.getPassword(); // Storing the newly entered password from Postman
+
+        /*
+         * If a user attempts to enter an empty password,
+         * then it will result in a 404 Bad Request
+         */
         if (newPassword == null || newPassword.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
