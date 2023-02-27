@@ -3,21 +3,24 @@ package com.revature.facespace.controller;
 import com.revature.facespace.model.Likes;
 import com.revature.facespace.repository.LikesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
+@RequestMapping("/api/likes")
 public class LikesController {
     @Autowired
     LikesRepository likesRepository;
 
     //Still need a way to verify user ID and post ID
-    @PostMapping("/api/posts/likes")
+    @PostMapping
     public int addLike(@RequestBody Likes like) {
         likesRepository.save(like);
         return likesRepository.countLikeByPostId(like.getPostId());
+    }
+
+    @GetMapping("/{postId}")
+    public int getPostLikes(@PathVariable Integer postId) {
+        return likesRepository.countLikeByPostId(postId);
     }
 }
