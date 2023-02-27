@@ -115,14 +115,22 @@ public class UserController {
      *      "surname": "Sean" 
      *  }
      * 
-     *  Note that the "givenName" and "surname" fields should be identical 
-     *  so the code can search up both of those columns in the database. 
+     *  Note that the "givenName" and "surname" fields are the only important data 
+     *  we care so the code can search up both of those columns in the database. 
      *  The "id", "emailAddress", and "password" fields do not matter
      */
     @PostMapping("/search_friends")
-    public ResponseEntity<List<User>> searchUsers(@RequestBody User body) {
-        List<User> users = userRepository.findByGivenName(body.getGivenName());
+    public ResponseEntity<Set<User>> searchUsers(@RequestBody User body) {
+
+        // Grabs unique users from the database
+        Set<User> users = new HashSet<User>(userRepository.findByGivenName(body.getGivenName()));
         users.addAll(userRepository.findBySurname(body.getSurname()));
+
+        // Scrub emails and passwords of the users
+        users.forEach((u) -> u.setEmailAddress(""));
+        users.forEach((u) -> u.setPassword(""));
+
+        // Returns the set of users
         return ResponseEntity.status(200).body(users);
     }
 }
