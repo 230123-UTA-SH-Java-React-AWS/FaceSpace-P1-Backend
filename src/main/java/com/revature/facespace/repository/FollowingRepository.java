@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface FollowingRepository extends JpaRepository<Following, Integer> {
     List<Following> findAllFollowingsByFollowerId(Integer followingId);
-    List<Following> findAllFollowingsByFollowingId(Integer followingId);
+    // List<Following> findAllFollowingsByFollowingId(Integer followingId);
 }

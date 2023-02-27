@@ -10,7 +10,7 @@ import jakarta.persistence.*;
 @Table(name="following_list")
 public class Following implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private Integer followerId;
