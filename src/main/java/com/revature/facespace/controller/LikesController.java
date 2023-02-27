@@ -16,11 +16,11 @@ public class LikesController {
     @PostMapping
     public int addLike(@RequestBody Likes like) {
         likesRepository.save(like);
-        return likesRepository.countLikeByPostId(like.getPostId());
+        return likesRepository.countByPostId(like.getPostId());
     }
 
     @GetMapping("/{postId}")
     public int getPostLikes(@PathVariable Integer postId) {
-        return likesRepository.countLikeByPostId(postId);
+        return likesRepository.countByPostId(postId);
     }
 }
