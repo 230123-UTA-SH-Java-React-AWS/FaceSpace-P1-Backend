@@ -20,8 +20,8 @@ public class CommentController {
     }
 
     @PostMapping
-    public Comment addComment(@RequestBody Comment comment) {
+    public List<Comment> addComment(@RequestBody Comment comment) {
         commentRepository.save(comment);
-        return comment;
+        return commentRepository.findAllCommentsByPostId(comment.getPostId());
     }
 }
