@@ -16,8 +16,8 @@ public class PostController {
     PostRepository postRepository;
 
     @GetMapping("/{postId}")
-    public Post getPostById(@PathVariable Integer postId) {
-        return postRepository.getById(postId);
+    public Optional<Post> getPostById(@PathVariable Integer postId) {
+        return postRepository.findById(postId);
     }
 
     @GetMapping("/{userId}")
