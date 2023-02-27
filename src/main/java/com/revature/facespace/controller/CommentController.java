@@ -9,16 +9,17 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
+@RequestMapping("/api/comments")
 public class CommentController {
     @Autowired
     CommentRepository commentRepository;
 
-    @GetMapping("/api/comments/{postId}")
+    @GetMapping("/{postId}")
     public List<Comment> getAllCommentsByPost(Integer postId) {
         return commentRepository.findAllCommentsByPostId(postId);
     }
 
-    @PostMapping("/api/comments")
+    @PostMapping
     public Comment addComment(@RequestBody Comment comment) {
         commentRepository.save(comment);
         return comment;

@@ -3,18 +3,14 @@ package com.revature.facespace.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.revature.facespace.model.Following;
 import com.revature.facespace.repository.FollowingRepository;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
+@RequestMapping("/api/followings")
 public class FollowingController {
     @Autowired
     FollowingRepository followingRepository;
@@ -28,7 +24,7 @@ public class FollowingController {
      *  "following" (id of the person being followed)
      * }
     */
-    @GetMapping("/api/followings/{userId}")
+    @GetMapping("/{userId}")
     public List<Following> findAllFollowingsByFollowerId(@PathVariable Integer userId) {
         return followingRepository.findAllFollowingsByFollowerId(userId);
     }
@@ -42,7 +38,7 @@ public class FollowingController {
      *  "following" (id of the person being followed)
      * }
     */
-    @PostMapping("/api/followings")
+    @PostMapping
     public Following addFollowing(@RequestBody Following following) {
        return followingRepository.save(following);
     }

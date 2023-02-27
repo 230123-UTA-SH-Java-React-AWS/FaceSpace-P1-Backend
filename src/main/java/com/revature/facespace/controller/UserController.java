@@ -12,18 +12,19 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
+@RequestMapping("/api")
 public class UserController {
     @Autowired
     UserRepository userRepository;
 
     //Retrieving a specific user
-    @GetMapping("/api/users/{id}")
+    @GetMapping("/users/{id}")
     public Optional<User> getUserById(@PathVariable Integer id) {
         return userRepository.findById(id);
     }
 
     //Registration/creating a new user
-    @PostMapping("/api/users")
+    @PostMapping("/users")
     public User addUser(@RequestBody User user) {
        return userRepository.save(user);
     }
@@ -40,7 +41,7 @@ public class UserController {
      * "password": ""
      * 
      */
-    @PutMapping("/api/users/{id}")
+    @PutMapping("/users/{id}")
     public ResponseEntity<User> changeUserPassword(@PathVariable int id, @RequestBody User enteredPassword) {
         Optional<User> userExist = userRepository.findById(id);
 
@@ -88,7 +89,7 @@ public class UserController {
      * from the database
      * 
     */
-    @PostMapping("/api/login")
+    @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User body) {
         try {
             User u = userRepository.findByEmailAddressAndPassword(body.getEmailAddress(), body.getPassword());
@@ -118,7 +119,7 @@ public class UserController {
      *  so the code can search up both of those columns in the database. 
      *  The "id", "emailAddress", and "password" fields do not matter
      */
-    @PostMapping("/api/search_friends")
+    @PostMapping("/search_friends")
     public ResponseEntity<List<User>> searchUsers(@RequestBody User body) {
         List<User> users = userRepository.findByGivenName(body.getGivenName());
         users.addAll(userRepository.findBySurname(body.getSurname()));

@@ -10,26 +10,27 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
+@RequestMapping("/api/posts")
 public class PostController {
     @Autowired
     PostRepository postRepository;
 
-    @GetMapping("/api/posts/{postId}")
+    @GetMapping("/{postId}")
     public Post getPostById(@PathVariable Integer postId) {
         return postRepository.getById(postId);
     }
 
-    @GetMapping("/api/posts/{userId}")
+    @GetMapping("/{userId}")
     public List<Post> getAllPostsByUser(@PathVariable Integer userId) {
         return postRepository.findAllPostsByProfileId(userId);
     }
 
-    @GetMapping("api/posts")
+    @GetMapping
     public List<Post> getAllPosts() {
         return postRepository.findAll();
     }
 
-    @PostMapping("/api/posts")
+    @PostMapping
     public Post addPost(@RequestBody Post post) {
         postRepository.save(post);
         return post;
