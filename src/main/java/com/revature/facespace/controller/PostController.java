@@ -20,7 +20,7 @@ public class PostController {
         return postRepository.findById(postId);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public List<Post> getAllPostsByUser(@PathVariable Integer userId) {
         return postRepository.findAllPostsByProfileId(userId);
     }
