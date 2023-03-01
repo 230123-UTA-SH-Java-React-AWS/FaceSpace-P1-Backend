@@ -27,8 +27,13 @@ public class UserController {
 
     //Registration/creating a new user
     @PostMapping("/users")
-    public User addUser(@RequestBody User user) {
-       return userRepository.save(user);
+    public ResponseEntity<User> addUser(@RequestBody User user) {
+       if (userRepository.findByEmailAddress(user.getEmailAddress()) != null) {
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+       } else {
+           userRepository.save(user);
+           return ResponseEntity.status(HttpStatus.OK).body(user);
+       }
     }
 
     /*
